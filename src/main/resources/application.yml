@@ -1,0 +1,14 @@
+server:
+  port: 9090
+
+spring:
+  kafka:
+    consumer:
+      group-id: xyz
+      auto-offset-reset: earliest
+    bootstrap-servers: localhost:9092
+
+myapp:
+  kafka:
+    topic: dakbangla
+    messages-per-request: 10
