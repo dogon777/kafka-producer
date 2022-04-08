@@ -1,0 +1,33 @@
+version: '3.7'
+
+services:
+  zookeeper:
+    image: wurstmeister/zookeeper
+    container_name: zookeeper
+    ports:
+      - "2181:2181"
+      
+  kafka:
+    image: wurstmeister/kafka
+    container_name: kafka
+    ports:
+      - "9092:9092"
+    depends_on:
+      - zookeeper
+    environment:
+      KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'false'
+      
+  kafka-producer:
+    container_name: kafka-producer
+    build:
+      context: ./kafka-producer
+    depends_on:
+      - kafka
+    ports:
+      - 9090:9090
+    links:
+      - kafka
+    environment:
+      SPRING_KAFKA_BOOTSTRAP_SERVERS: localhost:9092
